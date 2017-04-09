@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calcolatrice</title>
+    <script type="text/javascript" src="calc.js"></script>
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <div id="content">
+      <div id="calculator">
+        <div id="monitor">
+          <div id="spaceOnMonitor">
+          </div>
+          <div id="screen" align="right">
+            <div id="screenResult">
+            </div>
+            <div id="screenOperation">
+            </div>
+          </div>
+        </div>
+
+        <div id="header">
+        </div>
+
+        <div id="scientific">
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('(')">
+              <span class="textButton">(</span>
+            </div>
+          </div>
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput(')')">
+              <span class="textButton">)</span>
+            </div>
+          </div>
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('%')">
+              <span class="textButton">%</span>
+            </div>
+          </div>
+
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('xsup2')">
+              <span class="textButton">x<sup>2</sup></span>
+            </div>
+          </div>
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('sin')">
+              <span class="textButton">sin</span>
+            </div>
+          </div>
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('ln')">
+              <span class="textButton">ln</span>
+            </div>
+          </div>
+
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('10supx')">
+              <span class="textButton">10<sup>x</sup></span>
+            </div>
+          </div>
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('cos')">
+              <span class="textButton">cos</span>
+            </div>
+          </div>
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('log')">
+              <span class="textButton">log</span>
+            </div>
+          </div>
+
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('e')">
+              <span class="textButton">e</span>
+            </div>
+          </div>
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('tan')">
+              <span class="textButton">tan</span>
+            </div>
+          </div>
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('square')">
+              <span class="textButton">	&#8730;</span>
+            </div>
+          </div>
+
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('pi')">
+              <span class="textButton">	&#960;</span>
+            </div>
+          </div>
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('x!')">
+              <span class="textButton">x!</span>
+            </div>
+          </div>
+          <div class="containerScientificButton">
+            <div class="scientificButton" onclick="getInput('xsupy')">
+              <span class="textButton">x<sup>y</sup></span>
+            </div>
+          </div>
+        </div>
+
+        <div id="standard">
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('CA')">
+              <span class="textButton">CA</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <!-- <div class="standardButton">
+            </div> -->
+          </div>
+          <div class="containerStandardButton">
+            <!-- <div class="standardButton">
+            </div> -->
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('C')">
+              <span class="textButton">C</span>
+            </div>
+          </div>
+
+
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('7')">
+              <span class="textButton">7</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('8')">
+              <span class="textButton">8</span>
+            </div>
+          </div>
+          <div class="containerStandardButton" onclick="getInput('9')">
+            <div class="standardButton">
+              <span class="textButton">9</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('*')">
+              <span class="textButton">x</span>
+            </div>
+          </div>
+
+
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('4')">
+              <span class="textButton">4</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('5')">
+              <span class="textButton">5</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('6')">
+              <span class="textButton">6</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('/')">
+              <span class="textButton">/</span>
+            </div>
+          </div>
+
+
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('1')">
+              <span class="textButton">1</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('2')">
+              <span class="textButton">2</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('3')">
+              <span class="textButton">3</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('-')">
+              <span class="textButton">-</span>
+            </div>
+          </div>
+
+
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('0')">
+              <span class="textButton">0</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('.')">
+              <span class="textButton">,</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('=')">
+              <span class="textButton">=</span>
+            </div>
+          </div>
+          <div class="containerStandardButton">
+            <div class="standardButton" onclick="getInput('+')">
+              <span class="textButton">+</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>

@@ -1,0 +1,9 @@
+1)OK nella parte in basso dello screen devono comparire solo le cifre che si stanno inserendo
+2)OK nella parte in alto dello screen si devono inserire le intere operazioni
+3)OK gestione delle virgole (non più di una virgola per numero)
+4)OK una volta cliccato = deve comparire il risultato in basso
+5)OK tasto CE azzera l'ultima cifra che si stava inserendo (es 3+5 cancella il 5)
+6)OK tasto C azzera tutto lasciando lo 0
+7)OK se si clicca la virgola senza alcun numero prima, deve prendere in automatico 0,
+8) impossibilità nell'inserire più volte operatori +, -, * e /
+9) se si clicca la virgola e prima di un'operazione deve eliminare la virgola
