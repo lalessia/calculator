@@ -21,6 +21,12 @@ function manageOperation(input){
     case "CA":
       tmpInput = '0';
       setInputIntoMonitor();
+      break;
+    case "x!":
+      tmpInput = tmpInput + "!";
+      //opArr[opArr.length] = tmpInput;
+      setInputIntoMonitor();
+      break;
     default:
       console.log("l'input " + input + " non e' ancora stato gestito");
   }
@@ -32,7 +38,6 @@ function checkBasicOperation(input){
   var lastChar = opArr[opArr.length - 1];
   if(lastChar == '+' || lastChar == '*' ||lastChar == '/')
     result = false;
-  console.log(result);
   return result;
 }
 
@@ -58,9 +63,14 @@ function addInput(input){
     }
   }else if(input == '+' ||input == '*' ||input == '/' ||input == '-'){
     var check = checkBasicOperation(input);
+
+    //DA SISTEMARE: I PRIMI DUE IF HANNO UN CONTENUTO ANALOGO!!!
     if(tmpInput == '0' && opArr.length == 1 && check){
       opArr[opArr.length] = input;
-    }else if(!check && tmpInput == '0'){
+    }else if(!check && tmpInput == '0' && input == "-"){
+      opArr[opArr.length] = input;
+    }
+    else if(!check && tmpInput == '0'){
       opArr[opArr.length - 1] = input;
     }
     else{
@@ -74,8 +84,37 @@ function addInput(input){
   setInputIntoMonitor();
 }
 
+function checkNegativeNumber(){
+    for(var i = 1; i < opArr.length; i++){
+      if(opArr[i] == "-" && (opArr[i - 1] == "*" || opArr[i - 1] == "/" || opArr[i - 1] == "+" )){
+        var negative = -Math.abs(opArr[i + 1]);
+        opArr.splice(i, 2, negative)
+      }
+    }
+}
+function calculateFactorial(num, i){
+  var int = num.substr(0, num.length - 1);
+  var result = 1;
+  for(var j = 1; j <= int; j++){
+    result *= j;
+  }
+  opArr[i] = result;
+}
+
 function generateResult(){
   var i = 0;
+  checkNegativeNumber();
+
+  i = 0;
+  while(i < opArr.length){
+    var elm = String(opArr[i]);
+    if(elm.substr(elm.length - 1) == "!"){
+      calculateFactorial(elm, i);
+    }
+    i++;
+  }
+  
+  i = 0;
   while(i < opArr.length){
     if(!isNaN(parseFloat(opArr[i]))){
       opArr[i] = parseFloat(opArr[i]);
@@ -129,7 +168,11 @@ function setInputIntoMonitor(){
 
 function setResultIntoMonitor(){
   document.getElementById('screenResult').innerHTML = '';
+  if(isNaN(opArr[0]) && opArr[0] != undefined){
+    opArr[0] = 'Error'
+  }
   document.getElementById('screenOperation').innerHTML = opArr[0];
+
   tmpInput = '0'
 }
 
