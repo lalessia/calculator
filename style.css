@@ -3,7 +3,7 @@ html, body {
 }
 
 #content{
-background-color: #7B68EE;
+background-color: #6EB4E1;
 position:absolute;
 min-width: 100%;
 min-height: 100%;
@@ -12,8 +12,8 @@ min-height: 100%;
 #calculator{
   height: 300px;
   width: 500px;
-  background-color: #756F93;
-  /*#CDCED0;*/
+  /*background-color: #756F93;*/
+  background-color: #CBCCD0;
   margin-left: auto;
   margin-right: auto;
   margin-top: 200px;
@@ -22,7 +22,7 @@ min-height: 100%;
 }
 
 #monitor{
-  background-color: #5D5771;
+  background-color: #6A6E85;
   border-radius: 10px 10px 0px 0px;
   height: 60px;
   width: 100%;
@@ -42,6 +42,7 @@ min-height: 100%;
   background-color: #D4E2E3;
   position:relative;
   margin: auto;
+  font-family: verdana;
   border-radius: 5px 5px 5px 5px;
 }
 
@@ -53,6 +54,10 @@ min-height: 100%;
 #screenOperation{
   width: 100%;
   height: 40%;
+  position: relative;
+  float: left;
+  transform: translate(-51%, -10%);
+  left: 50%;
 }
 
 #scientific{
@@ -71,9 +76,13 @@ min-height: 100%;
   float: left;
   width: 50px;
   height: 30px;
-  background-color: yellow;
+  background-color: #35363B;
   border-radius: 5px 5px 5px 5px;
+  border-bottom: 2px solid #A4A3A8;
+  border-right: 2px solid #A4A3A8;
   cursor: pointer;
+  font-family: sans-serif;
+  color: white;
 }
 
 #standard{
@@ -90,14 +99,15 @@ min-height: 100%;
 .standardButton{
   width: 50px;
   height: 30px;
-  background-color: yellow;
+  background-color: #E9E9EB;
   float: left;
   overflow: hidden;
   margin: 0px auto;
   border-radius: 5px 5px 5px 5px;
-  border-bottom: 2px solid orange;
-  border-right: 2px solid orange;
+  border-bottom: 2px solid #A4A3A8;
+  border-right: 2px solid #A4A3A8;
   cursor: pointer;
+  font-family: sans-serif;
 }
 
 .textButton{

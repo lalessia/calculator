@@ -22,6 +22,10 @@ function manageOperation(input){
       tmpInput = '0';
       setInputIntoMonitor();
       break;
+    case "pi":
+      tmpInput = Math.PI;
+      setInputIntoMonitor();
+      break;
     case "x!":
       tmpInput = tmpInput + "!";
       //opArr[opArr.length] = tmpInput;
@@ -64,13 +68,9 @@ function addInput(input){
   }else if(input == '+' ||input == '*' ||input == '/' ||input == '-'){
     var check = checkBasicOperation(input);
 
-    //DA SISTEMARE: I PRIMI DUE IF HANNO UN CONTENUTO ANALOGO!!!
-    if(tmpInput == '0' && opArr.length == 1 && check){
+    if(tmpInput == '0' && ((opArr.length == 1 && check)||(!check && input == "-"))){
       opArr[opArr.length] = input;
-    }else if(!check && tmpInput == '0' && input == "-"){
-      opArr[opArr.length] = input;
-    }
-    else if(!check && tmpInput == '0'){
+    } else if(!check && tmpInput == '0'){
       opArr[opArr.length - 1] = input;
     }
     else{
@@ -113,7 +113,7 @@ function generateResult(){
     }
     i++;
   }
-  
+
   i = 0;
   while(i < opArr.length){
     if(!isNaN(parseFloat(opArr[i]))){
@@ -161,6 +161,7 @@ function setInputIntoMonitor(){
     total = 0;
   }else if(opArr.length >= 1){
     var show = opArr.toString().replace(/,/g, " ");
+    show = show.replace(/\*/g, "x");
     document.getElementById('screenResult').innerHTML = show;
   }
   document.getElementById('screenOperation').innerHTML = tmpInput;
