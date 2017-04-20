@@ -28,8 +28,25 @@ function manageOperation(input){
       break;
     case "x!":
       tmpInput = tmpInput + "!";
-      //opArr[opArr.length] = tmpInput;
       setInputIntoMonitor();
+      break;
+    case "(":
+      if(tmpInput != "0"){
+        opArr[opArr.length] = tmpInput;
+        tmpInput = "0";
+      }
+      opArr[opArr.length] = "(";
+      break;
+    case ")":
+      var openBracketNumber = countBracket("(");
+      var closedBracketNumber = countBracket(")");
+      if(openBracketNumber - closedBracketNumber >= 1){
+        if(tmpInput != "0"){
+          opArr[opArr.length] = tmpInput;
+          tmpInput = "";
+        }
+        opArr[opArr.length] = ")";
+      }
       break;
     default:
       console.log("l'input " + input + " non e' ancora stato gestito");
@@ -101,6 +118,91 @@ function calculateFactorial(num, i){
   opArr[i] = result;
 }
 
+function countBracket(bracketType){
+  var x = 0;
+  for(var i = 0; i < opArr.length; i++){
+    if(opArr[i] == bracketType)
+      x++;
+  }
+  return x;
+}
+
+function closedOpenBracket(){
+  var openBracketNumber = countBracket("(");
+  var closedBracketNumber = countBracket(")");
+
+  if(openBracketNumber - closedBracketNumber > 0){
+    var cicle = openBracketNumber - closedBracketNumber;
+    for(var i = 0; i < cicle; i++){
+      opArr[opArr.length] = ")";
+    }
+  }
+}
+
+function manageBasicOperation(arr){
+  var i = 0;
+  while(i < arr.length){
+    if(arr[i] == "*" || arr[i] == "/"){
+      var result = "";
+      if(arr[i] == "*"){
+        result = (arr[i - 1] * arr[i + 1]);
+      }else{
+        result = arr[i - 1] / arr[i + 1];
+      }
+      arr.splice(i - 1, 3, result);
+      i = i - 1;
+    }
+    i++;
+  }
+
+  i = 0;
+  while(i < arr.length){
+    if(arr[i] == "+" || arr[i] == "-"){
+      var result = "";
+      if(arr[i] == "+"){
+        result = arr[i - 1] + arr[i + 1];
+      }else{
+        result = arr[i - 1] - arr[i + 1];
+      }
+      arr.splice(i - 1, 3, result);
+      i = i - 2;
+    }
+    i++;
+  }
+}
+
+function manageOperationInBracket(){
+  //while(thereAreBracket){
+    var end = 0;
+    var begin = 0;
+    var j;
+
+    console.log(opArr);
+    for(var i = 0; i < opArr.length; i++){
+      if(opArr[i] == ")")
+        end = i;
+    }
+    j = i;
+    while(opArr[j] != "("){
+      j--;
+    }
+    begin = j;
+
+    //opArr.splice(j, 1);
+    var subOpArr = [];
+    subOpArr = opArr.slice(begin, end + 1);
+
+    manageBasicOperation(subOpArr);
+    console.log("subOpArr: " + subOpArr);
+    console.log("old opArr: " + opArr);
+    opArr.splice(begin, end-begin+1, subOpArr[1]);
+    console.log("new opArr: " + opArr);
+    if(countBracket("(") == 0){
+      thereAreBracket = false;
+    }
+  //}
+}
+
 function generateResult(){
   var i = 0;
   checkNegativeNumber();
@@ -122,35 +224,24 @@ function generateResult(){
     i++;
   }
 
-  i = 0;
-  while(i < opArr.length){
-    if(opArr[i] == "*" || opArr[i] == "/"){
-      var result = "";
-      if(opArr[i] == "*"){
-        result = (opArr[i - 1] * opArr[i + 1]);
-      }else{
-        result = opArr[i - 1] / opArr[i + 1];
-      }
-      opArr.splice(i - 1, 3, result);
-      i = i - 1;
-    }
-    i++;
+  //conta il numero di parentesi tonde aperte
+  //se non sono state chiuse chiudile automaticamente alla fine
+  //fare un ciclo for sul numero di parentesi tonde aperte
+  //prendi la prima parentesi cerca se ci sono altre parentesi tonde aperte prima della chiusura della parentesi
+  //  SI: ricomincia a cercare da quel punto se ci sono altre parentesi aperte
+  //  NO: calcola tutto ciò che c'è tra le parentesi
+
+  closedOpenBracket();
+
+  var thereAreBracket = true;
+  if(countBracket("(") == 0){
+    thereAreBracket = false;
   }
 
-  i = 0;
-  while(i < opArr.length){
-    if(opArr[i] == "+" || opArr[i] == "-"){
-      var result = "";
-      if(opArr[i] == "+"){
-        result = opArr[i - 1] + opArr[i + 1];
-      }else{
-        result = opArr[i - 1] - opArr[i + 1];
-      }
-      opArr.splice(i - 1, 3, result);
-      i = i - 2;
-    }
-    i++;
-  }
+  if(thereAreBracket)
+    manageOperationInBracket();
+
+  manageBasicOperation(opArr);
   setResultIntoMonitor();
 }
 
