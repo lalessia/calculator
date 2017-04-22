@@ -27,7 +27,9 @@ function manageOperation(input){
       setInputIntoMonitor();
       break;
     case "x!":
-      tmpInput = tmpInput + "!";
+      if(tmpInput != "0" || isNaN(parseInt(tmpInput))){
+        tmpInput = tmpInput + "!";
+      }
       setInputIntoMonitor();
       break;
     case "(":
@@ -53,12 +55,31 @@ function manageOperation(input){
   }
 }
 
+//controlla se si può o meno inserire un operatore
+//l'operatore si può inserire:
+/*
+  1) se il valore appena precedente è un numero
+  2) se il valore appena precedente è un operatore diverso da meno e quello da inserire è un meno
+*/
 function checkBasicOperation(input){
   var result = true;
-  //var lastChar = tmpInput.substr(tmpInput.length - 1);
   var lastChar = opArr[opArr.length - 1];
-  if(lastChar == '+' || lastChar == '*' ||lastChar == '/')
+
+  var arrayOperator = ["*", "+", "/", "-"];
+  if(arrayOperator.indexOf(lastChar) != -1)
     result = false;
+  return result;
+}
+
+function changeLastOperator(input){
+  var result = false;
+  var secondToLastChar = opArr[opArr.length - 2];
+  var lastChar = opArr[opArr.length - 1];
+  var arrayOperator = ["+", "-", "*", "/"];
+  if(arrayOperator.indexOf(secondToLastChar) && lastChar == "-" && isNaN(parseInt(input))){
+    result = true;
+  }
+
   return result;
 }
 
@@ -84,13 +105,24 @@ function addInput(input){
     }
   }else if(input == '+' ||input == '*' ||input == '/' ||input == '-'){
     var check = checkBasicOperation(input);
+    var changeLastOp = changeLastOperator(input);
+    console.log(changeLastOp);
 
-    if(tmpInput == '0' && ((opArr.length == 1 && check)||(!check && input == "-"))){
+    if(changeLastOp){
+      console.log("not modified opArr");
+    }
+    else if(tmpInput == '0' && ((opArr.length == 1 && check)||(!check && input == "-"))){
       opArr[opArr.length] = input;
     } else if(!check && tmpInput == '0'){
       opArr[opArr.length - 1] = input;
     }
     else{
+      //se l'ultimo carattere di tmpInput è una virgola la si elimina
+      var lastChar = tmpInput.substr(tmpInput.length - 1);
+      if(lastChar == "."){
+        tmpInput = tmpInput.substring(0, tmpInput.length - 1);
+      }
+
       opArr[opArr.length] = tmpInput;
       opArr[opArr.length] = input;
       tmpInput = '0';
@@ -172,12 +204,12 @@ function manageBasicOperation(arr){
 }
 
 function manageOperationInBracket(){
-  //while(thereAreBracket){
+  var thereAreBracket = true;
+  while(thereAreBracket){
     var end = 0;
     var begin = 0;
     var j;
 
-    console.log(opArr);
     for(var i = 0; i < opArr.length; i++){
       if(opArr[i] == ")")
         end = i;
@@ -188,26 +220,29 @@ function manageOperationInBracket(){
     }
     begin = j;
 
-    //opArr.splice(j, 1);
     var subOpArr = [];
     subOpArr = opArr.slice(begin, end + 1);
 
     manageBasicOperation(subOpArr);
-    console.log("subOpArr: " + subOpArr);
-    console.log("old opArr: " + opArr);
     opArr.splice(begin, end-begin+1, subOpArr[1]);
-    console.log("new opArr: " + opArr);
-    if(countBracket("(") == 0){
+
+    var openBracketNumber = countBracket("(");
+    if(openBracketNumber == 0){
       thereAreBracket = false;
     }
-  //}
+  }
+
+  //remove white elements from opArr
+  for(var i = 0; i < opArr.length; i++){
+    if(opArr[i] == ""){
+      opArr.splice(i, 1);
+    }
+  }
 }
 
 function generateResult(){
   var i = 0;
-  checkNegativeNumber();
 
-  i = 0;
   while(i < opArr.length){
     var elm = String(opArr[i]);
     if(elm.substr(elm.length - 1) == "!"){
@@ -216,6 +251,7 @@ function generateResult(){
     i++;
   }
 
+  checkNegativeNumber();
   i = 0;
   while(i < opArr.length){
     if(!isNaN(parseFloat(opArr[i]))){
