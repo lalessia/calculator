@@ -50,6 +50,13 @@ function manageOperation(input){
         opArr[opArr.length] = ")";
       }
       break;
+    case "xSUP2":
+      if(!isNaN(parseInt(tmpInput))){
+        tmpInput = tmpInput + "SUP2";
+      }
+      //tmpInput deve essere un numero
+      //se tmpInput è vuoto, l'ultimo elemento di opArr deve essere una parentesi tonda chiusa
+      break;
     default:
       console.log("l'input " + input + " non e' ancora stato gestito");
   }
@@ -73,8 +80,17 @@ function checkBasicOperation(input){
 
 function changeLastOperator(input){
   var result = false;
-  var secondToLastChar = opArr[opArr.length - 2];
-  var lastChar = opArr[opArr.length - 1];
+  var secondToLastChar;
+  var lastChar;
+
+  if(tmpInput == "0"){
+    secondToLastChar = opArr[opArr.length - 2];
+    lastChar = opArr[opArr.length - 1];
+  } else{
+    lastChar = tmpInput;
+    secondToLastChar = opArr[opArr.length - 1];
+  }
+
   var arrayOperator = ["+", "-", "*", "/"];
   if(arrayOperator.indexOf(secondToLastChar) && lastChar == "-" && isNaN(parseInt(input))){
     result = true;
@@ -86,7 +102,7 @@ function changeLastOperator(input){
 function addInput(input){
   if(!isNaN(parseInt(input)) || input == '.'){
     if(tmpInput === '0'){
-      if(opArr.length == 1){
+      if(opArr.length == 1 && opArr[0]  != "("){
         opArr = [];
         tmpInput = '0';
         setInputIntoMonitor();
@@ -106,7 +122,6 @@ function addInput(input){
   }else if(input == '+' ||input == '*' ||input == '/' ||input == '-'){
     var check = checkBasicOperation(input);
     var changeLastOp = changeLastOperator(input);
-    console.log(changeLastOp);
 
     if(changeLastOp){
       console.log("not modified opArr");
@@ -203,6 +218,14 @@ function manageBasicOperation(arr){
   }
 }
 
+function deleteSpaceInArray(){
+  for(var i = 0; i < opArr.length; i++){
+    if(opArr[i] == ""){
+      opArr.splice(i, 1);
+    }
+  }
+}
+
 function manageOperationInBracket(){
   var thereAreBracket = true;
   while(thereAreBracket){
@@ -211,8 +234,10 @@ function manageOperationInBracket(){
     var j;
 
     for(var i = 0; i < opArr.length; i++){
-      if(opArr[i] == ")")
+      if(opArr[i] == ")"){
         end = i;
+        break;
+      }
     }
     j = i;
     while(opArr[j] != "("){
@@ -224,18 +249,12 @@ function manageOperationInBracket(){
     subOpArr = opArr.slice(begin, end + 1);
 
     manageBasicOperation(subOpArr);
+    deleteSpaceInArray();
     opArr.splice(begin, end-begin+1, subOpArr[1]);
 
     var openBracketNumber = countBracket("(");
     if(openBracketNumber == 0){
       thereAreBracket = false;
-    }
-  }
-
-  //remove white elements from opArr
-  for(var i = 0; i < opArr.length; i++){
-    if(opArr[i] == ""){
-      opArr.splice(i, 1);
     }
   }
 }
@@ -244,9 +263,29 @@ function generateResult(){
   var i = 0;
 
   while(i < opArr.length){
+    console.log("opArr: " + opArr);
     var elm = String(opArr[i]);
     if(elm.substr(elm.length - 1) == "!"){
       calculateFactorial(elm, i);
+    }
+    if(elm.indexOf("SUP") != -1){
+      var index = elm.indexOf("SUP");
+      var base = elm.substring(0, index);
+      var exp = elm.substring(index + 3, elm.length);
+
+      //l'esponente può essere:
+      //1) un numero
+      //2) un meno
+      //3) Una parentesi tonda
+      //4) una radice quadrata
+      // Non può essere un operatore o un fattoriale
+      var tot = 1;
+      for(var j = 0; j < exp; j++){
+        tot *= base;
+      }
+
+      opArr[i] = tot;
+      console.log("Tot: " + tot);
     }
     i++;
   }
@@ -281,17 +320,39 @@ function generateResult(){
   setResultIntoMonitor();
 }
 
-function setInputIntoMonitor(){
-  var total;
+function manageElevationNumber(){
+  var otherNumber = tmpInput.substring(0, tmpInput.length - 4);
+  var sup = document.createElement("SUP");
+  var node = document.createTextNode("2");
+  sup.appendChild(node);
+  var element = document.getElementById("screenOperation");
+  element.appendChild(sup);
+}
 
-  if(opArr.length == 0){
-    total = 0;
-  }else if(opArr.length >= 1){
+function setInputIntoMonitor(){
+  if(opArr.length >= 1){
     var show = opArr.toString().replace(/,/g, " ");
     show = show.replace(/\*/g, "x");
+
+    while(show.indexOf("SUP") != -1){
+      var position = show.indexOf("SUP");
+      show = [show.slice(0, position), '<sup>2</sup>', show.slice(position + 4)].join('');
+    }
+    // for(var i = 0; i < show.length; i++){
+    //   var exp = opArr[i].substring(opArr[i].length - 4, opArr[i].length)
+    //   if(exp == "sup2"){
+    //     opArr[i] = opArr[i].substring(0, opArr[i].length - 4) + '<sup>2</sup>'
+    //   }
+    // }
     document.getElementById('screenResult').innerHTML = show;
   }
-  document.getElementById('screenOperation').innerHTML = tmpInput;
+
+  var subOperation = tmpInput.substring(tmpInput.length - 4, tmpInput.length);
+  if(subOperation == "SUP2"){
+    manageElevationNumber();
+  }else{
+    document.getElementById('screenOperation').innerHTML = tmpInput;
+  }
 }
 
 function setResultIntoMonitor(){
