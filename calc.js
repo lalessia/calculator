@@ -23,7 +23,7 @@ function manageOperation(input){
       setInputIntoMonitor();
       break;
     case "pi":
-      tmpInput = Math.PI;
+      tmpInput = 	'&#960;';
       setInputIntoMonitor();
       break;
     case "x!":
@@ -49,6 +49,9 @@ function manageOperation(input){
         }
         opArr[opArr.length] = ")";
       }
+      break;
+    case "%":
+      console.log("gestiamo la percentuale adesso!");
       break;
     case "xSUP2":
       if(!isNaN(parseInt(tmpInput))){
@@ -263,8 +266,10 @@ function generateResult(){
   var i = 0;
 
   while(i < opArr.length){
-    console.log("opArr: " + opArr);
     var elm = String(opArr[i]);
+    if(elm == "&#960;"){
+      opArr[i] = Math.PI;
+    }
     if(elm.substr(elm.length - 1) == "!"){
       calculateFactorial(elm, i);
     }
@@ -285,7 +290,6 @@ function generateResult(){
       }
 
       opArr[i] = tot;
-      console.log("Tot: " + tot);
     }
     i++;
   }
@@ -298,13 +302,6 @@ function generateResult(){
     }
     i++;
   }
-
-  //conta il numero di parentesi tonde aperte
-  //se non sono state chiuse chiudile automaticamente alla fine
-  //fare un ciclo for sul numero di parentesi tonde aperte
-  //prendi la prima parentesi cerca se ci sono altre parentesi tonde aperte prima della chiusura della parentesi
-  //  SI: ricomincia a cercare da quel punto se ci sono altre parentesi aperte
-  //  NO: calcola tutto ciò che c'è tra le parentesi
 
   closedOpenBracket();
 
@@ -338,17 +335,9 @@ function setInputIntoMonitor(){
       var position = show.indexOf("SUP");
       show = [show.slice(0, position), '<sup>2</sup>', show.slice(position + 4)].join('');
     }
-    // for(var i = 0; i < show.length; i++){
-    //   var exp = opArr[i].substring(opArr[i].length - 4, opArr[i].length)
-    //   if(exp == "sup2"){
-    //     opArr[i] = opArr[i].substring(0, opArr[i].length - 4) + '<sup>2</sup>'
-    //   }
-    // }
     document.getElementById('screenResult').innerHTML = show;
   }
-
-  var subOperation = tmpInput.substring(tmpInput.length - 4, tmpInput.length);
-  if(subOperation == "SUP2"){
+  if(tmpInput.toString().indexOf("SUP2") != -1){
     manageElevationNumber();
   }else{
     document.getElementById('screenOperation').innerHTML = tmpInput;
